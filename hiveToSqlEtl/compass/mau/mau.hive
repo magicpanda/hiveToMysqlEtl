@@ -1,0 +1,6 @@
+select to_date(w.timedate) date, t.client client,t.install_confversion confversion, count(distinct w.id) mau  from 
+(select distinct id,client,install_confversion from hive_track_diagon.track_user where datesub='2015-08-19') t
+join
+(select distinct id,timedate from hive_track_diagon.log_track_diagon where datesub>='2015-07-19' and action='login') w
+on t.id=w.id
+group by to_date(w.timedate),t.client,t.install_confversion;

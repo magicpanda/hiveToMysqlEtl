@@ -1,0 +1,17 @@
+#!noop This should only be sourced not executed
+#
+# Set these according to your hive and sql
+hiveFileName=EE_conv.hive
+hiveResultFileName=EE_conv
+sqlFileName=insertEE_conv.sql
+#
+# The values below normally do not change
+#
+hiveServer=slpr-aha01.lpdomain.com
+hiveServerUserName=esoniat
+sqlServer=nycps.lpnet.com
+sqlUser=hiveetl
+sqlPassword=pfaaS3$
+
+
+

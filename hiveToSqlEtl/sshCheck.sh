@@ -48,10 +48,10 @@ echo "$(date) ${0}" >> ${sshTestRunLog}
 
 
 # the directory this script is in.
-sshServerUserName="esoniat"
-destinationBaseDir="adHocEtl"
+sshServerUserName="ubuntu"
+destinationBaseDir="compass"
 # Only hosts with pub keys should be used.
-sshHostList="slpr-aha01.lpdomain.com ropr-aha01.lpdomain.com svpr-aha01.lpdomain.com"
+sshHostList="aws12.mte.io aws13.mte.io"
 scpTestDir="${destinationBaseDir}/${sshWorkingDirectory}"
 testScpFileName="lastScpTest.date"
 #echo "$(date) checking hosts ${sshHostList}" >> ${sshTestRunLog}

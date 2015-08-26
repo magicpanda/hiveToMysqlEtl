@@ -1,0 +1,9 @@
+-- Set the number of days AGO here
+-- 
+SET DAYS_AGO=2;
+--
+--
+SET SECONDS_OFFSET=(86000*${hiveconf:DAYS_AGO});
+
+
+describe vs_hdfs;

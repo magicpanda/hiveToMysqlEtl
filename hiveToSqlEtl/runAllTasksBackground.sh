@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash --login
 # 
 # This script will go through all of the directories in the
 # task directory.  Any directory containing a hiveEtlConfig file 

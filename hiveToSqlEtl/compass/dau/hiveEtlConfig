@@ -1,0 +1,17 @@
+#!noop This should only be sourced not executed
+#
+# Set these according to your hive and sql
+hiveFileName=dau.hive
+hiveResultFileName=dau
+sqlFileName=insertDAU.sql
+#
+# The values below normally do not change
+#
+hiveServer=master
+hiveServerUserName=ubuntu
+sqlServer=rds1.mte.io
+sqlUser=diagon
+sqlPassword=diagon2014
+
+
+

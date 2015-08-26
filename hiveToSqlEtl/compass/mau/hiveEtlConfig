@@ -1,0 +1,15 @@
+# Set these according to your hive and sql
+hiveFileName=mau.hive
+hiveResultFileName=mau
+sqlFileName=insertMAU.sql
+#
+# The values below normally do not change
+#
+hiveServer=master
+hiveServerUserName=ubuntu
+sqlServer=rds1.mte.io
+sqlUser=diagon
+sqlPassword=
+
+
+

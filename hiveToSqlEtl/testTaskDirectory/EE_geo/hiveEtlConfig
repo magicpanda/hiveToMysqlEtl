@@ -1,0 +1,17 @@
+#!noop This should only be sourced not executed
+#
+# Set these according to your hive and sql
+hiveFileName=EE_geo.hive
+hiveResultFileName=EE_geo
+sqlFileName=insertEE_geo.sql
+#
+# The values below normally do not change
+#
+hiveServer=slpr-aha01.lpdomain.com
+hiveServerUserName=esoniat
+sqlServer=nycps.lpnet.com
+sqlUser=hiveetl
+sqlPassword=pfaaS3$
+
+
+

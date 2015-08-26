@@ -1,0 +1,18 @@
+-- Set the number of days AGO here
+-- 
+SET DAYS_AGO=2;
+--
+--
+SET SECONDS_OFFSET=(86000*${hiveconf:DAYS_AGO});
+
+
+select * from(
+select distinct(session_id), visitor_id,from_unixtime(round(time_stamp/1000)), 
+get_json_object(biz,'$.Eng.biz[*].ENG_INTERACTIVE_IND'),
+get_json_object(evts,'$.PVisitorLoginEvent.evts[*].SITE_SESSION_ID') realtimesessionID 
+from vs_hdfs
+		where site IN('other','4186977','32020749') 
+		and site_id IN('37426636','4186977','32020749') 
+		and day > FROM_unixTime(unix_timestamp() - ${hiveconf:SECONDS_OFFSET},'yyyyMMdd')
+and get_json_object(biz,'$.Eng.biz[*].ENG_INTERACTIVE_IND') is not null 
+and get_json_object(biz,'$.Eng.biz[*].ENG_INTERACTIVE_IND') != '0' )a1

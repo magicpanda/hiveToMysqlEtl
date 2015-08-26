@@ -1,6 +1,8 @@
+#!/bin/bash --login
+
 # This runs the tasks in a specific task directory
 #
-hiveResultTopDir="adHocEtl"
+hiveResultTopDir="compass"
 scriptDir=${0%/*}
 killHiveScript="killAllJobsFromLog.sh"
 # check for and report errors in the config.
@@ -55,7 +57,7 @@ function runHiveAndSql() {
         debugMode="true"
     fi
     # make a unique dir for all task 
-    hiveDir=$(cygpath -u "${hiveResultTopDir}/${allTaskDir}/${taskDir}")
+    hiveDir="~/${hiveResultTopDir}/${allTaskDir}/${taskDir}"
     let sshStatus=1
     # get a unique name for each file
     fileRoot="$(uuidgen)"
@@ -103,12 +105,13 @@ function runHiveAndSql() {
         fi
         # A script can use this as the date for the run or it can use its own calculation
         echo "$(date) Starting ${hiveServer}:${hiveDir}/${tempHiveFileName} for date(s) ${dateString}"
-        ssh  -oBatchMode=yes ${hiveServerUserName}@${hiveServer} "cd ${hiveDir};hive  -hiveconf mapred.map.child.java.opts=-Xmx2048M  -hiveconf dateString=${dateString} -f ${tempHiveFileName} > ${resultFileName} 2>> ${logFileName}"
+        ssh  -oBatchMode=yes ${hiveServerUserName}@${hiveServer} "source /etc/profile;cd ${hiveDir};beeline -u jdbc:hive2://master:10000 --outputformat=csv2 -f ${tempHiveFileName} > ${resultFileName} 2>> ${logFileName}"
         let lastSsh=$?
         let "sshStatus|=${lastSsh}"
         if [[ ${lastSsh} -ne 0 ]] ; then
 	    echo "$(date) Failed executing hive on remote server"
-            echo "$(date) ssh  -oBatchMode=yes ${hiveServerUserName}@${hiveServer} cd ${hiveDir};hive  -hiveconf mapred.map.child.java.opts=-Xmx2048M  -f ${tempHiveFileName} > ${resultFileName} 2>> ${logFileName}"
+#	    echo "$(date) ssh  -oBatchMode=yes ${hiveServerUserName}@${hiveServer} cd ${hiveDir};hive  -hiveconf mapred.map.child.java.opts=-Xmx2048M  -f ${tempHiveFileName} > ${resultFileName} 2>> ${logFileName}"
+            echo "$(date) ssh  -oBatchMode=yes ${hiveServerUserName}@${hiveServer} cd ${hiveDir};beeline -u jdbc:hive2://master:10000 --outputformat=csv2 -f ${tempHiveFileName} > ${resultFileName} 2>> ${logFileName}"
         fi
         
         echo "$(date) Retrieving ${hiveServerUserName}@${hiveServer}:${hiveDir}/${logFileName} "
@@ -141,7 +144,7 @@ function runHiveAndSql() {
                 if [[ ${sshStatus} -ne 0 ]] ; then
                     echo "$(date) Failed retrieving results"
                 fi
-                cat ${hiveResultFileName} | lzop -c > ${hiveResultFileName}.lzo
+#                cat ${hiveResultFileName} | lzop -c > ${hiveResultFileName}.lzo
             fi
         else
             echo "$(date) Sending or receiving data via ssh failed"
@@ -167,7 +170,7 @@ function runHiveAndSql() {
     fi
 
     echo "$(date) Removing files from ${hiveServerUserName}@${hiveServer}:${hiveDir}"
-    ssh  -oBatchMode=yes ${hiveServerUserName}@${hiveServer} "cd ${hiveDir};rm -f ${resultFileName} ${logFileName} ${tempHiveFileName}"
+#    ssh  -oBatchMode=yes ${hiveServerUserName}@${hiveServer} "cd ${hiveDir};rm -f ${resultFileName} ${logFileName} ${tempHiveFileName}"
 
     let mysqlStatus=1
     let mysqlTryCount=0

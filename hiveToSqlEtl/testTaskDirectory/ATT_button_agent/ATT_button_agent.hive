@@ -1,0 +1,24 @@
+-- Set the number of days AGO here
+-- 
+SET DAYS_AGO=2;
+--
+--
+SET SECONDS_OFFSET=(86000*${hiveconf:DAYS_AGO});
+
+select 
+from_unixtime(round(chg_timestamp/1000)) as chg_timestamp,
+username,
+agent_id,
+type,
+REP_SESSION_ID
+
+from(
+select 
+get_json_object(agent_data,'$.agent.chg_timestamp') as chg_timestamp,
+get_json_object(agent_data,'$.agent.username') as username,get_json_object(agent_data,'$.agent.agent_id') as agent_id,
+get_json_object(agent_data,'$.agent.event_type_id') as type,
+get_json_object(agent_data,'$.agent.REP_SESSION_ID') as REP_SESSION_ID
+from rs_hdfs 
+where site=65595271 
+and day > FROM_unixTime(unix_timestamp() - ${hiveconf:SECONDS_OFFSET},'yyyyMMdd'))a1
+order by agent_id,chg_timestamp;

@@ -1,0 +1,16 @@
+-- Set the number of days AGO here
+-- 
+SET DAYS_AGO=2;
+--
+--
+SET SECONDS_OFFSET=(86000*${hiveconf:DAYS_AGO});
+
+
+select * from(
+	
+		select session_id,visitor_id,site_id,
+		regexp_extract(get_json_object(evts, '$.PVisitorLogoutEvent.evts[*].GEO_INFO'), "([0-9.]*)",1) IP
+		from vs_hdfs 
+		where site IN('other','4186977','32020749') 
+		and site_id IN('37426636','4186977','32020749') 
+		and day > FROM_unixTime(unix_timestamp() - ${hiveconf:SECONDS_OFFSET},'yyyyMMdd'))a1

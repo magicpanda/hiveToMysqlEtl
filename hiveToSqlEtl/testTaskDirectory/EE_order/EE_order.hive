@@ -1,0 +1,25 @@
+-- Set the number of days AGO here
+-- 
+SET DAYS_AGO=2;
+--
+--
+SET SECONDS_OFFSET=(86000*${hiveconf:DAYS_AGO});
+
+
+select distinct(session_id),visitor_id,site_id,UDE_NAME,UDE_VALUE,from_unixtime(round(UDE_START_TIME/1000)) from(
+	select distinct(session_id),visitor_id,site_id,concat("{", regexp_replace(UDES, "\\[\\{|\\}\\]", ""), "}") tttt
+	from(
+	
+		select distinct(session_id),visitor_id,site_id,get_json_object(evts, '$.PUDEValue.evts[*]') UDE
+		from vs_hdfs 
+		where site IN('other','4186977','32020749') 
+		and site_id IN('37426636','4186977','32020749') 
+		and day > FROM_unixTime(unix_timestamp() - ${hiveconf:SECONDS_OFFSET},'yyyyMMdd')
+		)a1	
+	LATERAL VIEW explode(split( UDE, "\\},\\{")) adTable AS UDES
+		)a2
+	LATERAL VIEW  json_tuple(tttt, 'UDE_GLOBAL_NAME', 'UDE_VALUE', 'SESSION_START_TIME') b as UDE_NAME, UDE_VALUE, UDE_START_TIME	
+		
+		WHERE UDE_NAME IN('uk-personal-shop_OrderNumberForReports','order_general_uk-sales-numberforreports','uk-personal-shop_OrderNumber')
+		
+		
