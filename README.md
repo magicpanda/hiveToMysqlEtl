@@ -11,16 +11,20 @@ and importing them to a mysql database also on a remote machine.
 
 Compass作为数据分析后台，主要基于Hadoop生态系统
 
-```flow
-st=>start: Start:>https://www.zybuluo.com
-io=>inputoutput: verification
-op=>operation: Your Operation
-cond=>condition: Yes or No?
-sub=>subroutine: Your Subroutine
-e=>end
+Python 示例：
 
-st->io->op->cond
-cond(yes)->e
-cond(no)->sub->io
+```python
+@requires_authorization
+def somefunc(param1='', param2=0):
+    '''A docstring'''
+    if param1 > param2: # interesting
+        print 'Greater'
+    return (param2 - param1 + 1) or None
+
+class SomeClass:
+    pass
+
+>>> message = '''interpreter
+... prompt'''
 ```
 
